@@ -1,4 +1,3 @@
-import React from 'react'
 import useRouteElements from './useRouteElements'
 
 const App = () => {

@@ -1,7 +1,7 @@
-import React from 'react'
 import { useRoutes } from 'react-router-dom'
 import { Login, Register } from './pages/auth'
 import { ProductsList } from './pages/products'
+import AuthLayout from './layouts/auth/AuthLayout'
 
 export default function useRouteElements() {
   const routerElements = useRoutes([
@@ -11,11 +11,19 @@ export default function useRouteElements() {
     },
     {
       path: 'login',
-      element: <Login />
+      element: (
+        <AuthLayout>
+          <Login />
+        </AuthLayout>
+      )
     },
     {
       path: 'register',
-      element: <Register />
+      element: (
+        <AuthLayout>
+          <Register />
+        </AuthLayout>
+      )
     }
   ])
   return routerElements
