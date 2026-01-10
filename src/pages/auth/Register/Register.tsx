@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, type RegisterSchema } from '../../../schema-validation/auth-schema'
 import Input from '../../../components/Input'
+import { omit } from 'lodash'
+import { useRegisterMutation } from '../../../hooks/useAuth'
 
 const Register = () => {
   const {
@@ -14,8 +16,15 @@ const Register = () => {
   } = useForm({
     resolver: zodResolver(registerSchema)
   })
+  const registerMutation = useRegisterMutation()
   const onSubmit = (data: RegisterSchema) => {
-    console.log('data', data)
+    const payload = omit(data, ['confirmPassword'])
+    if (registerMutation.isPending) return
+    try {
+      registerMutation.mutateAsync(payload)
+    } catch (error) {
+      console.error('error', error)
+    }
   }
   return (
     <div className='min-h-screen bg-gradient-to-br from-orange-200 to-primary_orange flex items-center'>
@@ -79,6 +88,7 @@ const Register = () => {
               {/* Button */}
               <motion.button
                 whileTap={{ scale: 0.97 }}
+                disabled={registerMutation.isPending}
                 type='submit'
                 className='w-full bg-primary_orange text-white py-3 rounded-lg
                 font-medium shadow-md hover:shadow-lg transition'

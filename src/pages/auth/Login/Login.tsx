@@ -17,7 +17,7 @@ const Login = () => {
     console.log('data', data)
   }
   return (
-    <div className='min-h-screen bg-gradient-to-br from-orange-200 to-primary_orange'>
+    <div className='min-h-screen bg-gradient-to-br from-orange-200 to-primary_orange flex items-center'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-1 lg:grid-cols-5 lg:py-16'>
           <AuthLeft />
