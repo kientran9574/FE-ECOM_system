@@ -17,7 +17,27 @@ export const useRegisterMutation = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        return toast.error(error.response?.data.message || 'Đăng ký thất bại')
+        toast.error(error.response?.data.message || 'Đăng ký thất bại')
+      }
+    }
+  })
+}
+
+export const useLoginMutation = () => {
+  const navigate = useNavigate()
+  return useMutation({
+    mutationKey: ['login'],
+    mutationFn: auth.login,
+    onSuccess: (data) => {
+      if (data.data.data) {
+        navigate('/')
+        toast.success(data.data.message)
+      }
+      return false
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message || 'Đăng nhập thất bại')
       }
     }
   })

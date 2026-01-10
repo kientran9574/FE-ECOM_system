@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { loginSchema, type LoginSchema } from '../../../schema-validation/auth-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Input from '../../../components/Input'
+import { useLoginMutation } from '../../../hooks/useAuth'
 const Login = () => {
   const {
     register,
@@ -13,8 +14,14 @@ const Login = () => {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema)
   })
+  const loginMutation = useLoginMutation()
   const onSubmit = (data: LoginSchema) => {
-    console.log('data', data)
+    if (loginMutation.isPending) return
+    try {
+      loginMutation.mutate(data)
+    } catch (error) {
+      console.error(error)
+    }
   }
   return (
     <div className='min-h-screen bg-gradient-to-br from-orange-200 to-primary_orange flex items-center'>
@@ -69,6 +76,7 @@ const Login = () => {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 type='submit'
+                disabled={loginMutation.isPending}
                 className='w-full bg-primary_orange text-white py-3 rounded-lg
                 font-medium shadow-md hover:shadow-lg transition'
               >
