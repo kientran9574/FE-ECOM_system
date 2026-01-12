@@ -1,43 +1,34 @@
 import { useMutation } from '@tanstack/react-query'
 import { auth } from '../apis/auth'
 import toast from 'react-hot-toast'
-import { AxiosError } from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { isAxiosUnprocessableEntityError } from '../utils/utils'
 export const useRegisterMutation = () => {
-  const navigate = useNavigate()
   return useMutation({
     mutationKey: ['register'],
     mutationFn: auth.register,
-    onSuccess: (data) => {
-      if (data.data.data) {
-        navigate('/login')
-        toast.success(data.data.message)
-      }
-      return false
+    onSuccess: (res) => {
+      const { message } = res.data
+      toast.success(message || 'Đăng ký thành công')
     },
     onError: (error) => {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message || 'Đăng ký thất bại')
+      if (!isAxiosUnprocessableEntityError(error)) {
+        toast.error('Có lỗi xảy ra!')
       }
     }
   })
 }
 
 export const useLoginMutation = () => {
-  const navigate = useNavigate()
   return useMutation({
     mutationKey: ['login'],
     mutationFn: auth.login,
-    onSuccess: (data) => {
-      if (data.data.data) {
-        navigate('/')
-        toast.success(data.data.message)
-      }
-      return false
+    onSuccess: (res) => {
+      const { message } = res.data
+      toast.success(message || 'Đăng nhập thành công')
     },
     onError: (error) => {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message || 'Đăng nhập thất bại')
+      if (!isAxiosUnprocessableEntityError(error)) {
+        toast.error('Có lỗi xảy ra!')
       }
     }
   })

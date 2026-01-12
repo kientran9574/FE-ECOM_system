@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthLeft from '../../../layouts/auth/components/AuthLeft'
 import { motion } from 'motion/react'
 import { useForm } from 'react-hook-form'
@@ -6,21 +6,39 @@ import { loginSchema, type LoginSchema } from '../../../schema-validation/auth-s
 import { zodResolver } from '@hookform/resolvers/zod'
 import Input from '../../../components/Input'
 import { useLoginMutation } from '../../../hooks/useAuth'
+import { isAxiosUnprocessableEntityError } from '../../../utils/utils'
+import type { IRessponseError } from '../../../types/utils'
 const Login = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema)
   })
+  const navigate = useNavigate()
   const loginMutation = useLoginMutation()
-  const onSubmit = (data: LoginSchema) => {
+  const onSubmit = async (payload: LoginSchema) => {
     if (loginMutation.isPending) return
     try {
-      loginMutation.mutate(data)
+      const res = await loginMutation.mutateAsync(payload)
+      const { data: user } = res.data
+      if (user) {
+        navigate('/')
+      }
     } catch (error) {
-      console.error(error)
+      if (isAxiosUnprocessableEntityError<IRessponseError<LoginSchema>>(error)) {
+        const formError = error.response?.data.data
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof LoginSchema, {
+              message: formError[key as keyof LoginSchema],
+              type: 'Server'
+            })
+          })
+        }
+      }
     }
   }
   return (

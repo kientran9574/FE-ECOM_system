@@ -1,29 +1,47 @@
 import { motion } from 'motion/react'
 import AuthLeft from '../../../layouts/auth/components/AuthLeft'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, type RegisterSchema } from '../../../schema-validation/auth-schema'
 import Input from '../../../components/Input'
 import { omit } from 'lodash'
 import { useRegisterMutation } from '../../../hooks/useAuth'
+import { isAxiosUnprocessableEntityError } from '../../../utils/utils'
+import type { IRessponseError } from '../../../types/utils'
 
 const Register = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(registerSchema)
   })
+  const navigate = useNavigate()
   const registerMutation = useRegisterMutation()
-  const onSubmit = (data: RegisterSchema) => {
+  const onSubmit = async (data: RegisterSchema) => {
     const payload = omit(data, ['confirmPassword'])
     if (registerMutation.isPending) return
     try {
-      registerMutation.mutateAsync(payload)
+      const res = await registerMutation.mutateAsync(payload)
+      const { data: user } = res.data
+      if (user) {
+        navigate('/login')
+      }
     } catch (error) {
-      console.error('error', error)
+      if (isAxiosUnprocessableEntityError<IRessponseError<Omit<RegisterSchema, 'confirmPassword'>>>(error)) {
+        const formError = error.response?.data.data
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof Omit<RegisterSchema, 'confirmPassword'>, {
+              message: formError[key as keyof Omit<RegisterSchema, 'confirmPassword'>],
+              type: 'Server'
+            })
+          })
+        }
+      }
     }
   }
   return (
