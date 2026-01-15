@@ -8,5 +8,8 @@ export const auth = {
   },
   login: (data: { email: string; password: string }) => {
     return http.post<IRessponseSuccess<AuthResponse>>('login', data)
+  },
+  logout: () => {
+    return http.post('/logout')
   }
 }

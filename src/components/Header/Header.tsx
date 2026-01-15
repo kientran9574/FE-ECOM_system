@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom'
 import IconShoppe from '../../icons/IconShoppe'
 import Popover from '../Popover/Popover'
+import { useAuthStore } from '../../stores/auth.store'
+import { useLogoutMutation } from '../../hooks/useAuth'
 
 const Header = () => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const logoutMutation = useLogoutMutation()
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -44,33 +51,46 @@ const Header = () => {
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
-
-          <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
-            renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                <div className='flex flex-col py-2  pl-3 pr-8'>
-                  <Link to={'/'} className='py-2 px-1 hover:text-primary_orange'>
-                    Account
-                  </Link>
-                  <Link to={'/'} className='py-2 px-1 hover:text-primary_orange mt-2'>
-                    Setting
-                  </Link>
+          {isAuthenticated && (
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                  <div className='flex flex-col py-2  pl-3 pr-8'>
+                    <Link to={'/'} className='py-2 px-1 hover:text-primary_orange'>
+                      Account
+                    </Link>
+                    <Link to={'/'} className='py-2 px-1 hover:text-primary_orange mt-2'>
+                      Setting
+                    </Link>
+                    <button onClick={handleLogout}>Đăng xuất</button>
+                  </div>
                 </div>
+              }
+            >
+              <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
+                <div className='w-6 h-6 mr-2 flex-shrink-0'>
+                  <img
+                    src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+                    alt='avatar'
+                    className='w-full h-full object-cover rounded-full'
+                  />
+                </div>
+                <div>duthanhduoc</div>
               </div>
-            }
-          >
-            <div className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'>
-              <div className='w-6 h-6 mr-2 flex-shrink-0'>
-                <img
-                  src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-                  alt='avatar'
-                  className='w-full h-full object-cover rounded-full'
-                />
-              </div>
-              <div>duthanhduoc</div>
+            </Popover>
+          )}
+          {!isAuthenticated && (
+            <div className='flex items-center'>
+              <Link to='/register' className='mx-3 capitalize hover:text-white/70'>
+                Đăng ký
+              </Link>
+              <div className='border-r-[1px] border-r-white/40 h-4' />
+              <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
+                Đăng nhập
+              </Link>
             </div>
-          </Popover>
+          )}
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
