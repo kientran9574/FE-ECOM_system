@@ -8,6 +8,8 @@ import Input from '../../../components/Input'
 import { useLoginMutation } from '../../../hooks/useAuth'
 import { isAxiosUnprocessableEntityError } from '../../../utils/utils'
 import type { IRessponseError } from '../../../types/utils'
+import Button from '../../../components/Button'
+import Spinner from '../../../components/Spinner'
 const Login = () => {
   const {
     register,
@@ -90,17 +92,16 @@ const Login = () => {
                 errorMessage={errors.password?.message}
                 placeHolder='Ít nhất 8 ký tự'
               />
-
-              <motion.button
-                whileTap={{ scale: 0.97 }}
+              <Button
                 type='submit'
+                isPending={loginMutation.isPending}
                 disabled={loginMutation.isPending}
                 className='w-full bg-primary_orange text-white py-3 rounded-lg
-                font-medium shadow-md hover:shadow-lg transition'
+                font-medium shadow-md hover:shadow-lg transition flex items-center justify-center'
+                icon={<Spinner />}
               >
                 Đăng nhập
-              </motion.button>
-
+              </Button>
               <p className='text-center text-sm text-gray-500 mt-6'>
                 Đã có tài khoản?{' '}
                 <Link to={'/register'} className='text-orange-600 hover:underline cursor-pointer'>
