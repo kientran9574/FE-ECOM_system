@@ -9,6 +9,8 @@ import { omit } from 'lodash'
 import { useRegisterMutation } from '../../../hooks/useAuth'
 import { isAxiosUnprocessableEntityError } from '../../../utils/utils'
 import type { IRessponseError } from '../../../types/utils'
+import Button from '../../../components/Button'
+import Spinner from '../../../components/Spinner'
 
 const Register = () => {
   const {
@@ -104,15 +106,16 @@ const Register = () => {
               />
 
               {/* Button */}
-              <motion.button
-                whileTap={{ scale: 0.97 }}
-                disabled={registerMutation.isPending}
+              <Button
                 type='submit'
+                isPending={registerMutation.isPending}
+                disabled={registerMutation.isPending}
                 className='w-full bg-primary_orange text-white py-3 rounded-lg
-                font-medium shadow-md hover:shadow-lg transition'
+                font-medium shadow-md hover:shadow-lg transition flex items-center justify-center'
+                icon={<Spinner />}
               >
                 Đăng ký
-              </motion.button>
+              </Button>
 
               {/* Footer */}
               <p className='text-center text-sm text-gray-500 mt-6'>
