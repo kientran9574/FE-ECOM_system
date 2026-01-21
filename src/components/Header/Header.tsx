@@ -6,6 +6,7 @@ import { useLogoutMutation } from '../../hooks/useAuth'
 
 const Header = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const user = useAuthStore((state) => state.user)
   const logoutMutation = useLogoutMutation()
   const handleLogout = () => {
     logoutMutation.mutate()
@@ -76,7 +77,7 @@ const Header = () => {
                     className='w-full h-full object-cover rounded-full'
                   />
                 </div>
-                <div>duthanhduoc</div>
+                <div>{user?.email}</div>
               </div>
             </Popover>
           )}

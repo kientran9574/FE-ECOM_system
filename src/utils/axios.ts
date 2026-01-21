@@ -1,6 +1,6 @@
 import type { AxiosError, AxiosInstance } from 'axios'
 import axios from 'axios'
-import { getAccessTokenToLS, removeTokenToLS, setAccessTokenToLS } from './utils'
+import { getAccessTokenToLS, removeToLS, setAccessTokenToLS, setInfoUserToLS } from './utils'
 import type { AuthResponse } from '../types/auth'
 
 class Http {
@@ -31,11 +31,13 @@ class Http {
           const { url } = response.config
           if (url === 'login' || url === 'register') {
             const accessToken = (response.data as AuthResponse).data?.access_token || ''
+            const user = response.data.data.user
             this.accessToken = accessToken
             setAccessTokenToLS(this.accessToken)
+            setInfoUserToLS(user)
           } else if (url === 'logout') {
             this.accessToken = ''
-            removeTokenToLS()
+            removeToLS()
           }
           return response
         },
