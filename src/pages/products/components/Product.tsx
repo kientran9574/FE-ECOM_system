@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import type { IProduct } from '../../../types/product'
 import { formatCurrent, formatNumberToSocialStyle } from '../../../utils/helper'
+import ProductStar from './ProductStar'
 
 const Product = ({ product }: { product: IProduct }) => {
   return (
@@ -37,11 +38,8 @@ const Product = ({ product }: { product: IProduct }) => {
 
           {/* Rating & Sold */}
           <div className='mt-3 flex items-center justify-between text-xs text-gray-500'>
-            <div className='flex items-center gap-1'>
-              <span className='text-yellow-400'>★</span>
-              <span>{formatNumberToSocialStyle(product.rating)}</span>
-            </div>
-            <span>Đã bán 5.6k</span>
+            <ProductStar rating={product.rating} />
+            <span>Đã bán {formatNumberToSocialStyle(product.sold)}</span>
           </div>
         </div>
       </motion.div>
