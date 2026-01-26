@@ -4,9 +4,9 @@ import { forwardRef, type ReactNode } from 'react'
 type MotionButtonProps = Omit<HTMLMotionProps<'button'>, 'children'>
 
 interface IButtonProps extends MotionButtonProps {
-  isPending: boolean
+  isPending?: boolean
   icon?: ReactNode
-  children: ReactNode
+  children?: ReactNode
 }
 
 const Button = forwardRef<HTMLButtonElement, IButtonProps>((props, ref) => {

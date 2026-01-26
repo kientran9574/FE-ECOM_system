@@ -1,14 +1,15 @@
+import type { InputHTMLAttributes } from 'react'
 import type { UseFormRegister } from 'react-hook-form'
 
-interface IInputProps {
+interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: HTMLInputElement['type']
   placeHolder?: string
   classNameWrap?: string
   name: string
-  register: UseFormRegister<any>
+  register?: UseFormRegister<any>
   errorMessage?: string
   classNameInput?: string
-  labelTitle: string
+  labelTitle?: string
   classNameLabel?: string
 }
 const Input = ({
@@ -22,12 +23,13 @@ const Input = ({
   errorMessage,
   labelTitle
 }: IInputProps) => {
+  const registerResults = register ? register(name) : {}
   return (
     <div className={classNameWrap}>
       <label htmlFor={name} className={classNameLabel}>
         {labelTitle}
       </label>
-      <input id={name} type={type} placeholder={placeHolder} {...register(name)} className={classNameInput} />
+      <input id={name} type={type} placeholder={placeHolder} {...registerResults} className={classNameInput} />
       {errorMessage && <p className='text-red-500 text-sm mt-1 min-h-[1rem]'>{errorMessage}</p>}
     </div>
   )
