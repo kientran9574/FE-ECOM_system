@@ -43,7 +43,7 @@ const ProductsList = () => {
             <AsideFilter />
           </div>
           <div className='col-span-9'>
-            <SortFilter />
+            <SortFilter pageSize={productQuery.data?.pagination?.page_size as number} queryConfig={queryConfig} />
             <div className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
               {product &&
                 product.length > 0 &&
