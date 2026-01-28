@@ -1,9 +1,10 @@
-import type { IProduct, IProductList, ProductListQueryParams } from '../types/product'
+import type { QueryStringConfig } from '../pages/products/components/ProductsList'
+import type { IProduct, IProductList } from '../types/product'
 import type { IRessponseSuccess } from '../types/utils'
 import http from '../utils/axios'
 
 export const productApi = {
-  getProducts: (params: ProductListQueryParams) => {
+  getProducts: (params: QueryStringConfig) => {
     return http.get<IRessponseSuccess<IProductList>>('/products', {
       params
     })

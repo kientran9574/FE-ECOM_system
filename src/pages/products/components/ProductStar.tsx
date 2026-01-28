@@ -3,8 +3,6 @@ const ProductStar = ({ rating }: any) => {
     if (order <= rating) {
       return '100%'
     } else if (order > rating && order - rating < 1) {
-      const _rating = (rating - Math.floor(rating)) * 100 + '%'
-      console.log('_rating', _rating)
       return (rating - Math.floor(rating)) * 100 + '%'
     }
     return '0%'

@@ -1,8 +1,9 @@
 import classNames from 'classnames'
+import type { QueryStringConfig } from '../../pages/products/components/ProductsList'
+import { createSearchParams, Link } from 'react-router-dom'
 
 interface Props {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryStringConfig
   pageSize: number
 }
 
@@ -28,7 +29,8 @@ Với RANGE = 2 áp dụng cho khoảng cách đầu, cuối và xung quanh curr
  */
 
 const RANGE = 2
-export default function Pagination({ page, setPage, pageSize }: Props) {
+export default function Pagination({ pageSize, queryConfig }: Props) {
+  const page = Number(queryConfig.page)
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
@@ -73,16 +75,22 @@ export default function Pagination({ page, setPage, pageSize }: Props) {
         }
 
         return (
-          <button
+          <Link
+            to={{
+              pathname: '/',
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
             key={index}
             className={classNames('bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border', {
               'border-cyan-500': pageNumber === page,
               'border-transparent': pageNumber !== page
             })}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
