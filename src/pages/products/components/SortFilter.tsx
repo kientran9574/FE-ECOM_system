@@ -40,7 +40,6 @@ const SortFilter = ({ pageSize, queryConfig }: ISortFilterProps) => {
       }).toString()
     })
   }
-  console.log("render")
   return (
     <div className='bg-gray-300/40 py-4 px-3'>
       <div className='flex flex-wrap items-center justify-between gap-2'>
