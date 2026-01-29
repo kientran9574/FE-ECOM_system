@@ -37,4 +37,10 @@ export interface ProductListQueryParams {
   price_max?: number
   price_min?: number
   name?: string
+  category?: string
+}
+
+export interface IProductCategories {
+  _id: string
+  name: string 
 }

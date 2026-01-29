@@ -1,9 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import Input from '../../../components/Input'
 import Button from '../../../components/Button'
+import { useCategories } from '../../../hooks/useCategories'
+import type { QueryStringConfig } from './ProductsList'
+import classNames from 'classnames'
 
-const AsideFilter = () => {
+interface IAsideFilterProps {
+  queryConfig: QueryStringConfig
+}
+
+const AsideFilter = ({ queryConfig }: IAsideFilterProps) => {
+  const { category } = queryConfig
+  const categoriesQuery = useCategories()
+  const categories = categoriesQuery.data || []
   return (
     <div className='py-4'>
       <Link to={'/'} className='flex items-center font-bold'>
@@ -24,19 +33,32 @@ const AsideFilter = () => {
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <ul>
-        <li className='py-2 pl-2'>
-          <Link to={'/'} className='relative px-2 text-primary_orange font-semibold'>
-            <svg viewBox='0 0 4 7' className='fill-primary_orange h-2 w-2 absolute top-1 left-[-10px]'>
-              <polygon points='4 3.5 0 0 0 7' />
-            </svg>
-            Thời trang nam
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={'/'} className='relative px-2 '>
-            Điện thoại
-          </Link>
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = category === categoryItem._id
+          return (
+            <li className='py-2 pl-2' key={categoryItem._id}>
+              <Link
+                to={{
+                  pathname: '/',
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={classNames('relative px-2', {
+                  'font-bold text-primary_orange': isActive
+                })}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className='fill-primary_orange h-2 w-2 absolute top-1 left-[-10px]'>
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                )}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
       <Link to={'/'} className='flex items-center font-bold mt-4 uppercase'>
         <svg

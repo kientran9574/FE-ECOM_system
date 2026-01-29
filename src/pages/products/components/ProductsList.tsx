@@ -24,7 +24,8 @@ const ProductsList = () => {
       order: queryParams.order,
       price_max: queryParams.price_max,
       price_min: queryParams.price_min,
-      rating_filter: queryParams.rating_filter
+      rating_filter: queryParams.rating_filter,
+      category: queryParams.category
     },
     isUndefined
   )
@@ -40,7 +41,7 @@ const ProductsList = () => {
           className='grid grid-cols-12 gap-6'
         >
           <div className='col-span-3'>
-            <AsideFilter />
+            <AsideFilter queryConfig={queryConfig} />
           </div>
           <div className='col-span-9'>
             <SortFilter pageSize={productQuery.data?.pagination?.page_size as number} queryConfig={queryConfig} />
